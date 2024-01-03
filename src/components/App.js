@@ -1,4 +1,5 @@
 import { getReviews } from "../api";
+import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
 
@@ -55,8 +56,11 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={handleNewestClick}>최신순</button>
-      <button onClick={handleBestClick}>베스트순</button>
+      <div>
+        <button onClick={handleNewestClick}>최신순</button>
+        <button onClick={handleBestClick}>베스트순</button>
+      </div>
+      <ReviewForm />
       <ReviewList items={sortedItems} onDelete={handleDelete} />
       {hasNext && (
         <button disabled={isLoading} onClick={handleLoadMore}>
