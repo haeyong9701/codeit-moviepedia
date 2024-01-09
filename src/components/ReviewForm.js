@@ -11,7 +11,7 @@ const INITAIL_VALUES = {
   imgFile: null,
 };
 
-const ReviewForm = () => {
+const ReviewForm = ({ onSubmitSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittingError, setSubmittingError] = useState(null);
   const [values, setValues] = useState(INITAIL_VALUES);
@@ -36,16 +36,20 @@ const ReviewForm = () => {
     formData.append("rating", values.rating);
     formData.append("content", values.content);
     formData.append("imgFile", values.imgFile);
+
+    let result;
     try {
       setSubmittingError(null);
       setIsSubmitting(true);
-      await createdReview(formData);
+      result = await createdReview(formData);
     } catch (error) {
       setSubmittingError(error);
       return;
     } finally {
       setIsSubmitting(false);
     }
+    const { review } = result;
+    onSubmitSuccess(review);
     setValues(INITAIL_VALUES);
   };
 
