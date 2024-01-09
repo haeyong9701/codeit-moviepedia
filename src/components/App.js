@@ -1,4 +1,4 @@
-import { createdReview, getReviews, updateReview } from "../api";
+import { createdReview, deleteReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { useEffect, useState } from "react";
@@ -19,9 +19,11 @@ const App = () => {
 
   const handleBestClick = () => setOrder("rating");
 
-  const handleDelete = (id) => {
-    const nextItems = items.filter((item) => item.id !== id);
-    setItems(nextItems);
+  const handleDelete = async (id) => {
+    const result = await deleteReview(id);
+    if (!result) return;
+
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleLoad = async (options) => {
