@@ -39,7 +39,7 @@ export async function deleteReview(id) {
     method: "DELETE",
   });
   if (!response.ok) {
-    throw new Error("리뷰를 수정하는데 실패했습니다");
+    throw new Error("리뷰를 삭제하는데 실패했습니다");
   }
   const body = await response.json();
   return body;
