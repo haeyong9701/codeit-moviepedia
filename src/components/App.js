@@ -1,24 +1,25 @@
-import { createdReview, deleteReview, getReviews, updateReview } from "../api";
-import ReviewForm from "./ReviewForm";
-import ReviewList from "./ReviewList";
-import { useCallback, useEffect, useState } from "react";
-import useAsync from "./hooks/useAsync";
-import LocaleContext from "../contexts/LocaleContext";
+import { createdReview, deleteReview, getReviews, updateReview } from '../api';
+import ReviewForm from './ReviewForm';
+import ReviewList from './ReviewList';
+import { useCallback, useEffect, useState } from 'react';
+import useAsync from './hooks/useAsync';
+import { LocaleProvider } from '../contexts/LocaleContext';
+import LocaleSelect from '../components/LocaleSelect';
 
 const LIMIT = 6;
 
 const App = () => {
   const [items, setItems] = useState([]);
-  const [order, setOrder] = useState("createdAt");
+  const [order, setOrder] = useState('createdAt');
   const [offset, setOffset] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [isLoading, loadingError, getReviewsAsync] = useAsync(getReviews);
 
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
-  const handleNewestClick = () => setOrder("createdAt");
+  const handleNewestClick = () => setOrder('createdAt');
 
-  const handleBestClick = () => setOrder("rating");
+  const handleBestClick = () => setOrder('rating');
 
   const handleDelete = async (id) => {
     const result = await deleteReview(id);
@@ -41,11 +42,15 @@ const App = () => {
       setOffset(options.offset + reviews.length);
       setHasNext(paging.hasNext);
     },
-    [getReviewsAsync]
+    [getReviewsAsync],
   );
 
   const handleLoadMore = () => {
-    handleLoad({ order, offset, limit: LIMIT });
+    handleLoad({
+      order,
+      offset,
+      limit: LIMIT,
+    });
   };
 
   const handleCreateSuccess = (review) => {
@@ -60,12 +65,17 @@ const App = () => {
   };
 
   useEffect(() => {
-    handleLoad({ order, offset: 0, limit: LIMIT });
+    handleLoad({
+      order,
+      offset: 0,
+      limit: LIMIT,
+    });
   }, [order, handleLoad]);
 
   return (
-    <LocaleContext.Provider value={"ko"}>
+    <LocaleProvider defaultValue={'ko'}>
       <div>
+        <LocaleSelect />
         <div>
           <button onClick={handleNewestClick}>최신순</button>
           <button onClick={handleBestClick}>베스트순</button>
@@ -84,7 +94,7 @@ const App = () => {
         )}
         {loadingError?.message && <span>{loadingError.message}</span>}
       </div>
-    </LocaleContext.Provider>
+    </LocaleProvider>
   );
 };
 

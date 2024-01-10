@@ -1,8 +1,8 @@
-import "./ReviewList.css";
-import Rating from "./Rating";
-import { useContext, useState } from "react";
-import ReviewForm from "./ReviewForm";
-import LocaleContext from "../contexts/LocaleContext";
+import './ReviewList.css';
+import Rating from './Rating';
+import { useState } from 'react';
+import ReviewForm from './ReviewForm';
+import { useLocale } from '../contexts/LocaleContext';
 
 const formatDate = (value) => {
   const date = new Date(value);
@@ -10,7 +10,7 @@ const formatDate = (value) => {
 };
 
 const ReviewListItem = ({ item, onDelete, onEdit }) => {
-  const locale = useContext(LocaleContext);
+  const locale = useLocale();
 
   const handleDeleteClick = () => onDelete(item.id);
 
