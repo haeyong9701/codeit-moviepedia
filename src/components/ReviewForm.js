@@ -1,18 +1,20 @@
-import { useState } from "react";
-import "./ReviewForm.css";
-import FileInput from "./FileInput";
-import RatingInput from "./RatingInput";
-import { createdReview } from "../api";
-import useAsync from "./hooks/useAsync";
+import { useState } from 'react';
+import './ReviewForm.css';
+import FileInput from './FileInput';
+import RatingInput from './RatingInput';
+import { createdReview } from '../api';
+import useAsync from './hooks/useAsync';
+import useTranslate from './hooks/useTranslate';
 
 const INITAIL_VALUES = {
-  title: "",
+  title: '',
   rating: 0,
-  content: "",
+  content: '',
   imgFile: null,
 };
 
 const ReviewForm = ({ initialValues = INITAIL_VALUES, initialPreview, onCancel, onSubmit, onSubmitSuccess }) => {
+  const t = useTranslate();
   const [values, setValues] = useState(initialValues);
   const [isSubmitting, submittingError, onSubmitAsync] = useAsync(onSubmit);
 
@@ -32,10 +34,10 @@ const ReviewForm = ({ initialValues = INITAIL_VALUES, initialPreview, onCancel, 
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("rating", values.rating);
-    formData.append("content", values.content);
-    formData.append("imgFile", values.imgFile);
+    formData.append('title', values.title);
+    formData.append('rating', values.rating);
+    formData.append('content', values.content);
+    formData.append('imgFile', values.imgFile);
 
     let result = await onSubmitAsync(formData);
     if (!result) return;
@@ -51,9 +53,9 @@ const ReviewForm = ({ initialValues = INITAIL_VALUES, initialPreview, onCancel, 
       <input name="title" value={values.title} onChange={handleInputChange} />
       <RatingInput name="rating" value={values.rating} onChange={handleChange} />
       <textarea name="content" value={values.content} onChange={handleInputChange} />
-      {onCancel && <button onClick={onCancel}>취소</button>}
+      {onCancel && <button onClick={onCancel}>{t('cancel button')}</button>}
       <button type="submit" disabled={isSubmitting}>
-        확인
+        {t('confirm button')}
       </button>
       {submittingError?.message && <div>{submittingError.message}</div>}
     </form>
